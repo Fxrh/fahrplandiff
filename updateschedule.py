@@ -5,11 +5,17 @@ import json
 import urllib
 import urllib.request
 
-SCHEDULE_FOLDER = __file__+"/schedules/"
+SCHEDULE_FOLDER = os.path.dirname(os.path.realpath(__file__))+"/schedules/"
 SCHEDULE_URL = "https://events.ccc.de/congress/2014/Fahrplan/schedule.json"
 
 logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
+
+
+def checkCreate(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
 
 def numFiles(directory):
     return len(next(os.walk(directory))[2])
@@ -40,6 +46,7 @@ def downloadSchedule(url):
 
 def main():
     logger.debug("Startup...")
+    checkCreate(SCHEDULE_FOLDER)
     files = numFiles(SCHEDULE_FOLDER)
     last_file = None
     if files > 0:
